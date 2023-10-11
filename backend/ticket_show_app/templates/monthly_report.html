@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to Ticket Show App</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Merriweather|Montserrat|Sacramento"
+      rel="stylesheet"
+    />
+
+    <style>
+      @page {
+        size: A4;
+        margin: 1cm;
+        border: 1px solid #ccc; 
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        padding: 2cm;
+      }
+
+      h1 {
+        color: #007bff; 
+        font-size: 1.625rem;
+        font-family: "Sacramento", cursive;
+      }
+
+      .brand-font {
+        font-weight: bold;
+        font-size: 1.625rem;
+        font-family: "Sacramento", cursive;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1cm;
+      }
+
+      th,
+      td {
+        border: 1px solid #ccc; 
+        padding: 8px;
+        text-align: center;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="brand-font">Hello {{ user_name }},</h1>
+    <p>
+      Thank you for being part of our
+      <span class="brand-font">Ticket Show</span> App!
+    </p>
+    <p>This is your monthly entertainment report for {{ current_month }}:</p>
+
+    {% if bookings %}
+    <table border="1" cellpadding="5" cellspacing="0">
+      <tr>
+        <th>Show Name</th>
+        <th>Rating</th>
+        <th>Booking Date</th>
+        <th>Ticket Cost</th>
+        <th>Number of Tickets</th>
+      </tr>
+      {% for booking in bookings %}
+      <tr>
+        <td>{{ booking.show.name }}</td>
+        <td>{{ booking.show.rating }}</td>
+        <td>{{ booking.booking_date.strftime("%Y-%m-%d") }}</td>
+        <td>{{ booking.cost }}</td>
+        <td>{{ booking.num_tickets }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+  </body>
+</html>

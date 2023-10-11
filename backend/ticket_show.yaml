@@ -1,0 +1,489 @@
+openapi: 3.0.0
+info:
+  title: Theater Booking API
+  version: 1.0.0
+  description: The Ticket Booking System is designed to streamline the process of booking tickets for shows at different theatres. It offers users the ability to register, log in, and browse available shows. Users can select their preferred showtimes and the number of tickets they wish to book. The system ensures ticket availability, handles user authentication, and provides booking confirmations. Additionally, the system equips admins with functionalities to manage theatres, shows, and view revenue reports for better overall control.
+
+      <h2>
+      DB Schema
+    </h2>
+    <center>
+   <img  src='https://dbdiagram.io/embed/64c8367102bd1c4a5e029679' alt="DB Schema Diagram"> </img>
+    </img>
+    <center>
+    
+    
+servers:
+  - url: http://localhost:8080/
+
+paths:
+  /user/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User registration successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /user/login:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: User login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /admin/register:
+    post:
+      summary: Register a new admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminRequest'
+      responses:
+        '200':
+          description: Admin registration successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /admin/login:
+    post:
+      summary: Admin login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Admin'
+      responses:
+        '200':
+          description: Admin login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' 
+
+  /theatre:
+    get:
+      summary: Get all theaters
+      security:
+        - ApiKeyAuth: []  # Requires a JWT token in the "Authorization" header
+      responses:
+        '200':
+          description: List of theaters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Theatre'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a new theatre (Admin Access Required)
+      security:
+        - AdminApiKeyAuth: []  # Requires a JWT token in the "Authorization" header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Theatre'
+      responses:
+        '200':
+          description: Theatre created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Theatre'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a theatre (Admin Access Required)
+      security:
+        - AdminApiKeyAuth: []  # Requires a JWT token in the "Authorization" header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Theatre'
+      responses:
+        '200':
+          description: Theatre updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Theatre'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /show:
+    get:
+      summary: Get all shows or shows by theatre ID
+      parameters:
+        - name: theatre_id
+          in: query
+          required: false
+          schema:
+            type: integer
+      security:
+        - ApiKeyAuth: []  # Requires a JWT token in the "Authorization" header
+      responses:
+        '200':
+          description: List of shows
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Show'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a new show (Admin Access Required)
+      security:
+        - AdminApiKeyAuth: []  # Requires a JWT token in the "Authorization" header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Show'
+      responses:
+        '200':
+          description: Show created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Show'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a show (Admin Access Required)
+      security:
+        - AdminApiKeyAuth: []  # Requires a JWT token in the "Authorization" header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Show'
+      responses:
+        '200':
+          description: Show updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Show'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /booking:
+    get:
+      summary: Get all bookings for a user
+      security:
+        - ApiKeyAuth: []  # Requires a JWT token in the "Authorization" header
+      responses:
+        '200':
+          description: List of bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TicketBooking'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Book tickets for a show (User Access Required)
+      security:
+        - ApiKeyAuth: []  # Requires a JWT token in the "Authorization" header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketBooking'
+      responses:
+        '200':
+          description: Ticket booking successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketBooking'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+      required:
+        - name
+        - email
+        - password
+        - role
+
+    Theatre:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        place:
+          type: string
+        location:
+          type: string
+        capacity:
+          type: integer
+      required:
+        - name
+        - place
+        - location
+
+    Show:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        rating:
+          type: number
+        tags:
+          type: string
+        ticket_price:
+          type: number
+        show_date:
+          type: string
+          format: date
+        start_time:
+          type: string
+          format: time
+        end_time:
+          type: string
+          format: time
+        capacity:
+          type: integer
+        available_tickets:
+          type: integer
+        theatre_id:
+          type: integer
+      required:
+        - name
+        - rating
+        - tags
+        - ticket_price
+        - show_date
+        - start_time
+        - end_time
+        - capacity
+        - available_tickets
+        - theatre_id
+
+    TicketBooking:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        show_id:
+          type: integer
+        booking_date:
+          type: string
+          format: date-time
+        cost:
+          type: number
+        num_tickets:
+          type: integer
+        user_rating:
+          type: integer
+      required:
+        - user_id
+        - show_id
+        - booking_date
+        - cost
+        - num_tickets
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+    AdminRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - name
+        - email
+        - password
+
+    AdminResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+      required:
+        - id
+        - name
+        - email
+
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+      required:
+        - token
+        - user
+
+    Admin:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - id
+        - name
+        - email
+        - password
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  
+    AdminApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+
+security:
+  - ApiKeyAuth: []          # For user authentication
+  - AdminApiKeyAuth: []     # For admin authentication
+
