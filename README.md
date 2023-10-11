@@ -2,6 +2,12 @@
 
 The Ticket Show App is a web application designed to showcase tickets. It consists of a backend and a frontend component. The backend handles data storage, processing, and communication, while the frontend provides a user interface to interact with the app.
 
+Users can book show tickets, interact with show details via APIs, and manage bookings.
+Admin dashboard featuring revenue statistics and detailed show insights.
+Utilized Redis and Celery for backend management with caching for performance, ensured security through token-based authentication.
+
+Tech stack : Vuejs, Python, Flask, Redis, Celery, Bootstrap.
+
 ## Folder Structure
 
 ### Backend
