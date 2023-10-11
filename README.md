@@ -60,3 +60,21 @@ The Ticket Show App is a web application designed to showcase tickets. It consis
    /home/<root>/go/bin/MailHog
     mailhog -api-bind-addr 127.0.0.1:8025 -ui-bind-addr 127.0.0.1:8025 -smtp-bind-addr 127.0.0.1:1025
 
+
+
+## Frontend Setup
+
+1. **Navigate to the frontend directory:**
+
+   ```bash
+   cd frontend/ticket_show_app
+
+2. **Install frontend dependencies:**
+
+   ```bash
+    npm install
+   
+3. **Run the development server**
+
+   ```bash
+     npm run dev
