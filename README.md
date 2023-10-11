@@ -38,4 +38,25 @@ The Ticket Show App is a web application designed to showcase tickets. It consis
    
    pip install -r requirements.txt
    python3 main.py
+2. **Start the Redis server in a new terminal window:**
+
+   ```bash
+   redis-server
+   
+3. **Run Celery worker:**
+
+   ```bash
+   celery -A main.celery worker -l info
+
+4. **Run Celery beat:**
+
+   ```bash
+   celery -A main.celery beat --max-interval 1 -l info
+
+   
+5. **Start MailHog for email testing (assuming you have MailHog installed):**
+
+   ```bash
+   /home/<root>/go/bin/MailHog
+  mailhog -api-bind-addr 127.0.0.1:8025 -ui-bind-addr 127.0.0.1:8025 -smtp-bind-addr 127.0.0.1:1025
 
