@@ -33,3 +33,9 @@ The Ticket Show App is a web application designed to showcase tickets. It consis
    cd backend
    virtualenv env
    source env/bin/activate
+
+   Install backend dependencies and run main.py
+   
+   pip install -r requirements.txt
+   python3 main.py
+
